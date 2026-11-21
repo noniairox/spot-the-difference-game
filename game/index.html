@@ -1,1 +1,113 @@
-placeholder
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Twin Lanterns — Spot the Difference</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0e0c1a;
+    color: #f1e6c8;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0 16px;
+  }
+  header { text-align: center; margin-bottom: 8px; }
+  header h1 { font-size: 30px; letter-spacing: 1px; color: #ffd76a; }
+  header h1 span { color: #ff6b5e; }
+  header p { font-size: 14px; color: #b8ad90; margin-top: 2px; }
+  #hud {
+    display: flex; align-items: center; gap: 14px;
+    background: #1c1830; border: 1px solid #3a3358; border-radius: 12px;
+    padding: 8px 14px; margin-bottom: 8px; width: 1200px; max-width: 96vw;
+  }
+  .stat { text-align: center; min-width: 64px; }
+  .stat b { display: block; font-size: 22px; color: #fff; }
+  .stat span { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #b8ad90; }
+  #timer.low b { color: #ff6b5e; }
+  #scene-name { font-size: 16px; font-weight: 700; color: #ffd76a; }
+  #scene-sub { font-size: 12px; color: #b8ad90; }
+  .spacer { flex: 1; }
+  button {
+    background: #2e5d7a; color: #fff; border: none; border-radius: 8px;
+    padding: 8px 14px; font-size: 14px; cursor: pointer; font-family: inherit;
+  }
+  button:hover { background: #3a7398; }
+  .scene-btn.active { background: #e63946; }
+  #board-wrap { position: relative; width: 1200px; max-width: 96vw; }
+  canvas {
+    display: block; width: 1200px; max-width: 96vw; height: auto;
+    border-radius: 10px; cursor: crosshair;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+  }
+  #found-list {
+    display: flex; flex-wrap: wrap; gap: 6px; justify-content: center;
+    width: 1200px; max-width: 96vw; margin-top: 8px;
+  }
+  .chip {
+    background: #1c1830; border: 1px solid #3a3358; color: #8f86ad;
+    border-radius: 20px; padding: 4px 12px; font-size: 13px;
+  }
+  .chip.found { background: #1f5c2e; border-color: #2f9e44; color: #c8f7c5; text-decoration: line-through; }
+  footer { margin-top: 10px; font-size: 13px; color: #8f86ad; text-align: center; }
+  footer b { color: #b8ad90; }
+  .overlay {
+    position: absolute; inset: 0; display: none;
+    align-items: center; justify-content: center; flex-direction: column;
+    background: rgba(10, 8, 24, 0.82); border-radius: 10px; text-align: center;
+  }
+  .overlay.show { display: flex; }
+  .overlay h2 { font-size: 40px; color: #ffd76a; margin-bottom: 8px; }
+  .overlay p { font-size: 18px; margin-bottom: 16px; }
+  .overlay button { font-size: 18px; padding: 12px 26px; background: #e63946; }
+  .overlay button:hover { background: #f05545; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🏮 Twin <span>Lanterns</span> 🏮</h1>
+  <p>Two pictures, almost the same. Find every difference before the lanterns burn out.</p>
+</header>
+<div id="hud">
+  <div>
+    <div id="scene-name">Pasar Lampion — Night Market</div>
+    <div id="scene-sub">Lanterns over the evening stalls</div>
+  </div>
+  <div class="spacer"></div>
+  <div class="stat"><b id="remaining">7</b><span>left to find</span></div>
+  <div class="stat" id="timer"><b>2:00</b><span>time left</span></div>
+  <div class="stat"><b id="score">0</b><span>score</span></div>
+  <div class="stat"><b id="hints">3</b><span>hints</span></div>
+  <button id="hint-btn" type="button">💡 Hint (H)</button>
+  <button id="mute-btn" type="button">🔊 Sound on</button>
+</div>
+<div id="board-wrap">
+  <canvas id="board" width="1200" height="600"></canvas>
+  <div class="overlay" id="win-overlay">
+    <h2>🎉 You found them all!</h2>
+    <p>Score: <b id="win-score">0</b> — the lanterns shine for you.</p>
+    <button id="next-btn" type="button">Next scene →</button>
+  </div>
+  <div class="overlay" id="lose-overlay">
+    <h2>⏰ Time's up!</h2>
+    <p>Some differences are still hiding. Try again?</p>
+    <button id="retry-btn" type="button">Try again</button>
+  </div>
+</div>
+<div id="found-list"></div>
+<div style="margin-top:10px; display:flex; gap:8px;">
+  <button class="scene-btn active" data-scene="1" type="button">1 · Night Market</button>
+  <button class="scene-btn" data-scene="2" type="button">2 · Koi Pond</button>
+  <button class="scene-btn" data-scene="3" type="button">3 · Observatory</button>
+</div>
+<footer>
+  Click a difference on either picture to circle it. Wrong click costs 5 seconds. &nbsp;·&nbsp;
+  <b>H</b> hint &nbsp;·&nbsp; <b>R</b> restart &nbsp;·&nbsp; <b>1/2/3</b> scenes &nbsp;·&nbsp; <b>M</b> mute
+</footer>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
